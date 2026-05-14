@@ -296,7 +296,7 @@ conda activate pymol-env
 
 If you use this work, please cite:
 
-Pira M. (2026). OTOF Variants: Integrated Analysis for Cochlear Gene Therapy (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.XXXXXXX [DOI pending]
+Pira M. (2026). OTOF Variants: Integrated Analysis for Cochlear Gene Therapy (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.20179266
 
 ## References
 
