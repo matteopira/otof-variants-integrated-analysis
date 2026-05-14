@@ -1,0 +1,50 @@
+Name,Protein change,aa_position,domain,consurf_grade,conservation_tier,Germline classification,proposed_reclassification,acmg_criteria
+NM_194248.3(OTOF):c.13A>G (p.Ile5Val),I5V,5.0,C2A,2,low (1-3),Uncertain significance,Candidate LB (BP4),BP4
+NM_194248.3(OTOF):c.142T>C (p.Phe48Leu),F48L,48.0,C2A,3,low (1-3),Uncertain significance,Candidate LB (BP4),BP4
+NM_194248.3(OTOF):c.211A>G (p.Lys71Glu),K71E,71.0,C2A,3,low (1-3),Uncertain significance,Candidate LB (BP4),BP4
+NM_194248.3(OTOF):c.224A>G (p.Asn75Ser),N75S,75.0,C2A,2,low (1-3),Uncertain significance,Candidate LB (BP4),BP4
+NM_194248.3(OTOF):c.229C>T (p.Leu77Phe),L77F,77.0,C2A,3,low (1-3),Uncertain significance,Candidate LB (BP4),BP4
+NM_194248.3(OTOF):c.1100C>T (p.Ser367Leu),S367L,367.0,C2B,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1150G>A (p.Asp384Asn),D384N,384.0,C2B,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1170C>G (p.His390Gln),H390Q,390.0,C2B,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1186G>A (p.Asp396Asn),D396N,396.0,C2B,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1222G>A (p.Glu408Lys),E408K,408.0,C2B,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1240C>T (p.Arg414Cys),R414C,414.0,C2B,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1253G>A (p.Arg418Gln),R418Q,418.0,C2B,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1328C>T (p.Ala443Val),A443V,443.0,C2B,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1336G>A (p.Gly446Ser),G446S,446.0,C2B,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1344C>A (p.Asn448Lys),N448K,448.0,C2B,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1350C>G (p.Asp450Glu),D450E,450.0,C2B,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1378T>C (p.Phe460Leu),F460L,460.0,C2B,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1469C>A (p.Pro490Gln),P490Q,490.0,C2C,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1471C>T (p.Leu491Phe),L491F,491.0,C2C,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1489G>A (p.Val497Met),V497M,497.0,C2C,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1505C>T (p.Ser502Leu),S502L,502.0,C2C,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1561T>C (p.Ser521Pro),S521P,521.0,C2C,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1564A>C (p.Asn522His),N522H,522.0,C2C,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1570G>A (p.Gly524Arg),G524R,524.0,C2C,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1631G>A (p.Arg544His),R544H,544.0,C2C,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1672G>A (p.Gly558Ser),G558S,558.0,C2C,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1678G>T (p.Gly560Trp),G560W,560.0,C2C,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1694T>C (p.Phe565Ser),F565S,565.0,C2C,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1697G>A (p.Arg566Gln),R566Q,566.0,C2C,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1696C>T (p.Arg566Trp),R566W,566.0,C2C,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1700C>A (p.Ala567Asp),A567D,567.0,C2C,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1714G>T (p.Gly572Cys),G572C,572.0,C2C,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1746C>G (p.Asn582Lys),N582K,582.0,C2C,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.1756A>C (p.Thr586Pro),T586P,586.0,C2C,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.2834A>T (p.His945Leu),"H198L, H255L, H945L",945.0,C2D,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.2882A>G (p.Gln961Arg),"Q961R, Q271R, Q214R",961.0,C2D,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.2896A>G (p.Met966Val),"M966V, M219V, M276V",966.0,C2D,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.2935G>A (p.Gly979Arg),"G232R, G289R, G979R",979.0,C2D,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.2956C>T (p.Arg986Cys),"R986C, R239C, R296C",986.0,C2D,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.2983T>C (p.Cys995Arg),"C248R, C305R, C995R",995.0,C2D,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.3013C>G (p.Pro1005Ala),"P1005A, P258A, P315A",1005.0,C2D,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.3017C>G (p.Thr1006Ser),"T1006S, T259S, T316S",1006.0,C2D,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.3025C>G (p.Gln1009Glu),"Q319E, Q1009E, Q262E",1009.0,C2D,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.3040G>A (p.Asp1014Asn),"D1014N, D267N, D324N",1014.0,C2D,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.3080A>G (p.Asp1027Gly),"D1027G, D280G, D337G",1027.0,C2D,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.3086C>T (p.Pro1029Leu),"P1029L, P339L, P282L",1029.0,C2D,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.3091A>G (p.Ile1031Val),"I1031V, I341V, I284V",1031.0,C2D,7,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.3101T>C (p.Ile1034Thr),"I1034T, I287T, I344T",1034.0,C2D,9,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
+NM_194248.3(OTOF):c.3124A>G (p.Met1042Val),"M1042V, M352V, M295V",1042.0,C2D,8,high (7-9),Uncertain significance,Candidate LP (PP3),PP3
