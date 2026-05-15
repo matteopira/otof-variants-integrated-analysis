@@ -9,3 +9,5 @@ kaleido>=0.2.1
 jupyter==1.1.1
 notebook==7.4.5
 ipykernel==6.31.0
+statsmodels==0.14.5
+biopython==1.87
