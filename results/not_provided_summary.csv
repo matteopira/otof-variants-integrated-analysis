@@ -1,0 +1,10 @@
+classification,n_annotated,pct_annotated,n_not_provided,pct_not_provided
+Benign,25,2.82,93,6.01
+Benign/Likely benign,44,4.97,4,0.26
+Likely benign,70,7.91,1041,67.29
+Uncertain significance,304,34.35,195,12.61
+Conflicting classifications of pathogenicity,178,20.11,53,3.43
+Likely pathogenic,94,10.62,45,2.91
+Pathogenic/Likely pathogenic,26,2.94,0,0.0
+Pathogenic,109,12.32,116,7.5
+not provided,26,2.94,0,0.0

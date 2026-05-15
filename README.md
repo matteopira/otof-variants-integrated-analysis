@@ -56,29 +56,30 @@ All datasets are publicly available and were retrieved through their respective 
 
 ## Methods
 
-All computational analyses were performed in **Python 3.10+** within the Jupyter Notebook environment. Structural visualization was conducted in **PyMOL** (open-source build, conda-forge channel).
+All computational analyses were performed in **Python 3.13** within the Jupyter Notebook environment. Structural visualization was conducted in **PyMOL** (open-source build, conda-forge channel). The exact software environment is specified in `requirements.txt` (pip) and `environment.yml` (conda).
 
 ### Software stack
 
-- **pandas** >= 2.0, for tabular data manipulation
-- **NumPy** >= 1.24, for numerical operations
-- **matplotlib** >= 3.7 and **seaborn** >= 0.12, for static visualization
-- **plotly** >= 5.0, for interactive visualization
-- **scipy** >= 1.10, for statistical tests (chi-square, Mann-Whitney U)
-- **requests**, for ConSurf DB API access
+- **pandas 2.3.3**, for tabular data manipulation
+- **NumPy 2.3.5**, for numerical operations
+- **matplotlib 3.10.6** and **seaborn 0.13.2**, for static visualization
+- **plotly 6.3.0**, for interactive visualization
+- **scipy 1.16.3**, for statistical tests (chi-square, Kruskal-Wallis, Mann-Whitney U)
+- **requests 2.32.5**, for ConSurf DB API access
 - **re** (Python standard library), for HGVS protein notation parsing
 - **PyMOL** (open-source), for molecular visualization and animation
 
 ### Analytical workflow
 
-The analysis is structured into six Jupyter notebooks:
+The analysis is structured into seven Jupyter notebooks:
 
-- **`notebooks/01-exploration.ipynb`**: ClinVar descriptive analysis, including variant counts, germline classification distribution, variant type and molecular consequence stratification, and cross-tabulation of consequence versus classification.
-- **`notebooks/02-gnomad-integration.ipynb`**: gnomAD v4 integration, including allele frequency distributions stratified by clinical classification, ACMG/AMP BS1 validation, and ancestry-specific founder mutation analysis across nine population groups.
-- **`notebooks/03-domain-mapping.ipynb`**: structural mapping, including parsing of amino acid positions from HGVS protein annotations, assignment of variants to the six C2 domains and the transmembrane domain (UniProt Q9HC10), pathogenic variant density calculation per domain, lollipop plot visualization, and statistical testing.
+- **`notebooks/01-exploration.ipynb`**: ClinVar descriptive analysis, including variant counts, germline classification distribution, variant type and molecular consequence stratification, cross-tabulation of consequence versus classification, and stratified analysis of records with and without condition annotation.
+- **`notebooks/02-gnomad-integration.ipynb`**: gnomAD v4 integration, including allele frequency distributions stratified by clinical classification, ACMG/AMP BS1 validation, ancestry-specific founder mutation analysis across nine population groups, and a detailed investigation of P/LP variants observed as homozygotes in gnomAD with Hardy-Weinberg expectation analysis.
+- **`notebooks/03-domain-mapping.ipynb`**: structural mapping, including robust HGVS protein notation parsing with multi-format support and parser comparison logging, variant assignment to the six C2 domains and the transmembrane domain (UniProt Q9HC10), pathogenic variant density calculation per domain, lollipop plot visualization, and chi-square and permutation-based statistical testing.
 - **`notebooks/04-consurf-vus.ipynb`**: ConSurf DB integration, per-residue conservation grade retrieval, conservation-based classification of missense VUS, and ACMG/AMP PP3/BP4 reclassification candidates.
 - **`notebooks/05-clinvar-temporal.ipynb`**: temporal analysis of ClinVar variant evaluations by year, cumulative classification trends, and comparison of pre-2024 vs. post-2024 P/LP evaluation rates using Mann-Whitney U test.
-- **`notebooks/06-interactive-lollipop.ipynb`**: interactive Plotly lollipop figure integrating all data layers, exported as standalone HTML and static PNG.
+- **`notebooks/06-interactive-lollipop.ipynb`**: interactive Plotly lollipop figure integrating all data layers, displayed inline in Jupyter with static PNG export.
+- **`notebooks/07-structural-analysis.ipynb`**: AlphaFold structure-based analysis including manual PDB parsing, pLDDT confidence score extraction, per-variant distance calculation to calcium-coordinating residues, pLDDT distribution comparison across classification groups (Kruskal-Wallis test), distance-to-calcium-binding-residues comparison (Mann-Whitney U test), and spatial clustering analysis of P/LP variants via permutation test (n=10,000, seed=42).
 
 ### Statistical testing (notebook 03)
 
@@ -120,7 +121,7 @@ Cross-tabulation of molecular consequence with germline classification reveals t
 
 Of 9,601 *OTOF* variants in gnomAD v4, **1,682 (17.5%) carry a ClinVar annotation**. Among 176 P/LP variants present in both databases, **none exceeds the ACMG/AMP BS1 threshold** (allele frequency > 0.005), validating compliance with population-rarity expectations. The highest observed allele frequency among P/LP variants is 0.011% (p.Arg963Ter).
 
-Three P/LP variants were observed as **homozygotes** in gnomAD individuals: p.Arg963Ter, p.Glu1700Gln, and p.Arg1172Gln.
+Three P/LP variants were observed as **homozygotes** in gnomAD individuals: p.Arg963Ter, p.Glu1700Gln, and p.Arg1172Gln. All three have observed homozygote counts far below Hardy-Weinberg expectation (observed: 1 each; HW-expected: less than 0.01 for each), suggesting these represent rare sampling events rather than evidence of misclassification. p.Glu1700Gln carries expert panel review status (Jun 2024); p.Arg963Ter is supported by multiple submitters with no conflicts (Sep 2025).
 
 Stratified analysis across nine gnomAD ancestry groups identified distinct founder mutations in each population:
 
@@ -172,7 +173,17 @@ Full results with position, domain, ConSurf grade, and proposed reclassification
 
 ClinVar 'Germline date last evaluated' data show a gradual increase in variant evaluations from 2009 onward. The Mann-Whitney U test comparing annual P/LP evaluation counts pre-2024 vs. post-2024 has limited power in this snapshot because the post-2024 window covers at most 1-2 years. Results are descriptive and should be revisited as post-trial curation data accumulate. Full annual counts are in `results/clinvar_temporal_analysis.csv`.
 
-### 6. Interactive visualization
+### 6. Structural analysis (AlphaFold + spatial statistics)
+
+1,574 ClinVar variants were matched to AlphaFold structural residues (255 P/LP, 641 VUS, 678 Benign). Three complementary analyses were performed:
+
+**pLDDT confidence:** P/LP variants have significantly higher median pLDDT (89.4) than VUS (85.2) or Benign (85.9), indicating they fall preferentially in well-ordered regions of the protein (Kruskal-Wallis H = 16.66, p = 2.4e-4). Variants in low-pLDDT regions (below 70, typically disordered linkers) are less likely to be pathogenic.
+
+**Distance to calcium-binding residues:** P/LP variants are significantly closer to the key calcium-coordinating aspartates (Asp491, Asp497, Asp533 in C2B; Asp571, Asp577 in C2C; Asp999, Asp1005 in C2D) than Benign variants (median 29.3 vs 32.5 Angstroms; Mann-Whitney U = 79,222, p = 0.024).
+
+**Spatial clustering:** P/LP variants are significantly more spatially clustered than expected by chance. Observed mean nearest-neighbor distance = 6.03 Angstroms vs null mean = 7.25 Angstroms across 10,000 permutations (p less than 0.0001, seed = 42).
+
+### 7. Interactive visualization
 
 An interactive lollipop plot is produced by notebook 06 and displays inline in Jupyter. Open `notebooks/06-interactive-lollipop.ipynb` to explore it. Features:
 
@@ -207,15 +218,19 @@ This integrated analysis confirms several principles of clinical variant interpr
 
 5. **Conservation-based evidence can prioritize VUS for reclassification**, but PP3 and BP4 provide only supporting-level evidence and require integration with functional and segregation data.
 
+6. **Three-dimensional structure corroborates sequence-based findings**: P/LP variants cluster significantly closer to calcium-coordinating residues (p = 0.024) and are more spatially concentrated than random (p less than 0.0001), confirming that functional constraint operates at the structural level and not only at the domain-label level.
+
+7. **ClinVar condition annotation status introduces a strong classification bias**: records without condition annotation (63.6% of the dataset) are disproportionately Likely benign (67.3% vs 7.9% in annotated records; chi-square p = 3.1e-204). Aggregate statistics that do not stratify by annotation status systematically underestimate the VUS fraction.
+
 ### Clinical implications for AAV-mediated gene therapy
 
 Patients carrying **biallelic frameshift, nonsense, or splice variants** represent the most unambiguously eligible candidates for gene therapy. Patients carrying **biallelic missense variants** would benefit from additional functional characterization (minigene assays, cellular models) before therapeutic eligibility can be confirmed. Population-specific screening panels for newborn hearing screening should incorporate ancestry-relevant founder mutations.
 
 ### Limitations
 
-- **ClinVar condition annotation is incomplete**: 1,547 of 2,432 records (63.6%) list the associated condition as "not provided".
-- **gnomAD represents adult individuals** and explicitly excludes those with diagnosed severe pediatric disease.
-- The **AlphaFold-predicted structure** is computational; experimentally determined structures of full-length otoferlin are not yet available.
+- **ClinVar condition annotation is incomplete**: 1,547 of 2,432 records (63.6%) list the associated condition as "not provided", with a significantly different classification distribution from annotated records (chi-square p = 3.1e-204). Stratification by annotation status is required for unbiased aggregate statistics.
+- **gnomAD represents adult individuals** and explicitly excludes those with diagnosed severe pediatric disease. The three P/LP homozygotes identified are consistent with HW-expected rare sampling events, not misclassification.
+- The **AlphaFold-predicted structure** is computational; experimentally determined structures of full-length otoferlin are not yet available. The calcium-binding residues used as reference points in the structural analysis are from published crystallographic data of individual C2 domains (Helfmann et al. 2011), not full-length coordinates.
 - **Short-read sequencing has limitations** for *OTOF* variant detection, including difficulties in phasing variants across the large gene and in detecting deep intronic and complex structural variants.
 - The **temporal analysis** uses 'date last evaluated', a point-in-time snapshot, not historical submission records. True reclassification history requires the ClinVar variant history VCF.
 - **ConSurf scores** reflect evolutionary conservation across vertebrates; they do not directly report functional impact and should be interpreted alongside experimental evidence.
@@ -226,7 +241,8 @@ Patients carrying **biallelic frameshift, nonsense, or splice variants** represe
 otof-variants-integrated-analysis/
 ├── README.md
 ├── LICENSE
-├── requirements.txt
+├── requirements.txt               # pip, exact versions pinned
+├── environment.yml                # conda environment
 ├── .gitignore
 ├── data/
 │   ├── clinvar_result.txt                              # ClinVar export (OTOF variants)
@@ -239,7 +255,8 @@ otof-variants-integrated-analysis/
 │   ├── 03-domain-mapping.ipynb                         # Domain-level analysis, permutation test, lollipop plot
 │   ├── 04-consurf-vus.ipynb                            # ConSurf integration and VUS reclassification
 │   ├── 05-clinvar-temporal.ipynb                       # Temporal analysis of ClinVar evaluations
-│   └── 06-interactive-lollipop.ipynb                   # Interactive Plotly lollipop plot
+│   ├── 06-interactive-lollipop.ipynb                   # Interactive Plotly lollipop plot
+│   └── 07-structural-analysis.ipynb                    # AlphaFold PDB analysis: pLDDT, distances, spatial clustering
 └── results/
     ├── classification_distribution.png
     ├── variant_type_distribution.png
@@ -262,33 +279,40 @@ otof-variants-integrated-analysis/
     ├── clinvar_temporal_analysis.csv                   # Annual classification counts
     ├── clinvar_temporal_cumulative.png                 # Cumulative stacked area chart
     ├── clinvar_plp_annual.png                          # Annual P/LP evaluations with 2024 marker
-    └── otof_interactive_lollipop_static.png            # Static PNG of the interactive lollipop plot
+    ├── otof_interactive_lollipop_static.png            # Static PNG of the interactive lollipop plot
+    ├── not_provided_analysis.png                       # Classification bias in unannotated ClinVar records
+    ├── not_provided_summary.csv
+    ├── gnomad_homozygotes_analysis.csv                 # Deep dive on P/LP homozygotes in gnomAD
+    ├── hgvs_parser_comparison.csv                      # Old vs new HGVS parser comparison
+    ├── otof_structural_per_residue.csv                 # Per-residue pLDDT and distance to Ca-binding sites
+    ├── plddt_by_classification.png                     # pLDDT distribution by clinical classification
+    ├── distance_to_ca_binding.png                      # Distance to calcium-binding residues by classification
+    └── spatial_clustering_test.csv                     # P/LP spatial clustering permutation test results
 ```
 
 ## How to reproduce
 
 These steps work from scratch on any machine with Python 3.10+ and internet access.
 
+**Option A — pip:**
 ```bash
-# 1. Clone the repository
 git clone https://github.com/matteopira/otof-variants-integrated-analysis.git
 cd otof-variants-integrated-analysis
-
-# 2. Install Python dependencies
 pip install -r requirements.txt
-
-# 3. Launch Jupyter and run notebooks in order (01 through 06)
 jupyter notebook
 ```
 
-For each notebook, use `Kernel > Restart & Run All`. Run notebooks in sequential order (01, 02, 03, 04, 05, 06) because notebook 06 reads ConSurf data produced by notebook 04.
-
-Optional: for 3D structural visualization, install PyMOL via conda:
-
+**Option B — conda (recommended, includes PyMOL):**
 ```bash
-conda create -n pymol-env -c conda-forge python=3.10 pymol-open-source
-conda activate pymol-env
+git clone https://github.com/matteopira/otof-variants-integrated-analysis.git
+cd otof-variants-integrated-analysis
+conda env create -f environment.yml
+conda activate otof-analysis
+conda install -c conda-forge pymol-open-source   # optional, for 3D visualization
+jupyter notebook
 ```
+
+For each notebook, use `Kernel > Restart & Run All`. Run in sequential order (01 through 07): notebook 06 reads ConSurf data produced by notebook 04, and notebook 07 reads the AlphaFold PDB from `data/`.
 
 **Note on ConSurf data (notebook 04):** The notebook first attempts to download conservation scores from the ConSurf DB REST API. If the API is unavailable, it falls back to a cached local file (`data/consurf_Q9HC10_grades.csv`). If neither is available, it generates a synthetic dataset (seed = 42) clearly labeled in all outputs, so the notebook runs to completion regardless.
 

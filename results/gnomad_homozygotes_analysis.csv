@@ -1,0 +1,4 @@
+gnomad_id,protein_consequence,allele_frequency,homozygote_count_observed,clinvar_classification,top_ancestry,hw_expected_homozygotes,clinvar_review_status,clinvar_date_last_evaluated
+2-26458218-C-T,p.Arg1172Gln,6.8429529623e-05,1,Pathogenic,East Asian,0.0034,"criteria provided, multiple submitters, no conflicts","Aug 6, 2024"
+2-26463969-C-G,p.Glu1700Gln,0.000103485413514,1,Pathogenic,East Asian,0.0078,reviewed by expert panel,"Jun 28, 2024"
+2-26476018-G-A,p.Arg963Ter,0.0001110012811656,1,Pathogenic,European (non-Finnish),0.009,"criteria provided, multiple submitters, no conflicts","Sep 10, 2025"
