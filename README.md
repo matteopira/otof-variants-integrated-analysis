@@ -75,7 +75,7 @@ The analysis is structured into seven Jupyter notebooks:
 
 - **`notebooks/01-exploration.ipynb`**: ClinVar descriptive analysis, including variant counts, germline classification distribution, variant type and molecular consequence stratification, cross-tabulation of consequence versus classification, and stratified analysis of records with and without condition annotation.
 - **`notebooks/02-gnomad-integration.ipynb`**: gnomAD v4 integration, including allele frequency distributions stratified by clinical classification, ACMG/AMP BS1 validation, ancestry-specific founder mutation analysis across nine population groups, and a detailed investigation of P/LP variants observed as homozygotes in gnomAD with Hardy-Weinberg expectation analysis.
-- **`notebooks/03-domain-mapping.ipynb`**: structural mapping, including robust HGVS protein notation parsing with multi-format support and parser comparison logging, variant assignment to the six C2 domains and the transmembrane domain (UniProt Q9HC10), pathogenic variant density calculation per domain, lollipop plot visualization, and chi-square and permutation-based statistical testing.
+- **`notebooks/03-domain-mapping.ipynb`**: structural mapping, including robust HGVS protein notation parsing with multi-format support and parser comparison logging, variant assignment to the six C2 domains and the transmembrane domain (UniProt Q9HC10), pathogenic variant density calculation per domain, lollipop plot visualization, chi-square and permutation-based statistical testing, and five supplementary analyses: (1) Fisher's exact test per domain vs linker as a fixed reference background; (2) fraction pathogenic per domain (ascertainment-corrected metric, P/LP / classified variants, with 95% Wilson CI); (3) domain-level distribution of not-provided condition records (chi-square test of ascertainment uniformity); (4) p.Arg1172Gln deep dive integrating ClinVar review status, gnomAD ancestry-stratified frequency, and ConSurf conservation grade; (5) HGVS non-parseable sensitivity analysis quantifying classification-specific parse rates.
 - **`notebooks/04-consurf-vus.ipynb`**: ConSurf DB integration, per-residue conservation grade retrieval, conservation-based classification of missense VUS, and ACMG/AMP PP3/BP4 reclassification candidates.
 - **`notebooks/05-clinvar-temporal.ipynb`**: temporal analysis of ClinVar variant evaluations by year, cumulative classification trends, and comparison of pre-2024 vs. post-2024 P/LP evaluation rates using Mann-Whitney U test.
 - **`notebooks/06-interactive-lollipop.ipynb`**: interactive Plotly lollipop figure integrating all data layers, displayed inline in Jupyter with static PNG export.
@@ -83,10 +83,12 @@ The analysis is structured into seven Jupyter notebooks:
 
 ### Statistical testing (notebook 03)
 
-Two statistical tests were applied to assess whether the distribution of P/LP variants across C2 domains deviates from a length-proportional null:
+Four complementary tests assess the pathogenic variant distribution across C2 domains:
 
 1. **Chi-square goodness-of-fit**: tests whether the global distribution across all domains differs from length-proportional expectations.
 2. **Permutation test (n = 10,000, two-tailed, seed = 42)**: for each domain, tests both enrichment and depletion by randomly reassigning P/LP variants across named-domain residues. The two-tailed p-value is `2 * min(p_enrichment, p_depletion)`, capped at 1.0.
+3. **Fisher's exact test per domain vs linker** (Bonferroni-corrected): tests whether the P/LP-to-non-P/LP ratio in each domain differs from the linker as a specific background. Yields an odds ratio directly interpretable as enrichment (OR > 1) or depletion (OR < 1) relative to the largest continuous unstructured region.
+4. **Fraction pathogenic**: P/LP / (P/LP + B/LB + VUS + Conflicting) per domain, conditioning on total classified variants to adjust for ascertainment bias. Wilson 95% confidence intervals applied to each domain estimate.
 
 ### ConSurf integration (notebook 04)
 
@@ -157,8 +159,14 @@ Variants with extractable amino acid positions (n = 1,600) were mapped onto the 
 
 - **Chi-square goodness-of-fit**: chi2 = 6.497, df = 6, p = 0.370 (not significant globally).
 - **Permutation test (two-tailed, n = 10,000, seed = 42)**: C2A is significantly depleted (p = 0.023). C2B, C2C, and C2D show a trend toward enrichment but do not reach significance individually. Full results in `results/domain_permutation_test_2tail.csv`.
+- **Fisher's exact test vs linker (Bonferroni-corrected)**: no domain survives multiple-testing correction. C2A shows the strongest depletion trend (OR = 0.49, p_Bonferroni = 0.40), consistent with the permutation result. Full results in `results/domain_fisher_exact.csv`.
+- **Fraction pathogenic**: C2B has the highest fraction of P/LP among classified variants (23.5%, 20/85; 95% Wilson CI 15.8-33.6%), more than double C2A (8.7%, 8/92; 95% CI 4.5-16.2%). Linker reference: 15.8%. Figure: `results/domain_fraction_pathogenic.png`.
 
 The significant depletion of C2A is consistent with published data describing it as atypical with weak or absent calcium-binding affinity (Helfmann et al., *J Mol Biol* 2011; Padmanarayana et al., *Biochemistry* 2014).
+
+**Ascertainment uniformity**: the fraction of records lacking condition annotation is statistically uniform across domains (chi-square test, p > 0.05), ranging from 54–67%. Domain-density conclusions are therefore not confounded by differential ascertainment.
+
+**p.Arg1172Gln deep dive**: this homozygote-carrying gnomAD variant (African/African-American ancestry) sits in C2E at a position with ConSurf conservation grade 7/9 (86th percentile across the full otoferlin sequence), indicating strong evolutionary constraint. Full outputs in `results/arg1172gln_consurf.png` and `results/arg1172gln_summary.csv`.
 
 ### 4. ConSurf conservation and VUS reclassification
 
@@ -228,7 +236,8 @@ Patients carrying **biallelic frameshift, nonsense, or splice variants** represe
 
 ### Limitations
 
-- **ClinVar condition annotation is incomplete**: 1,547 of 2,432 records (63.6%) list the associated condition as "not provided", with a significantly different classification distribution from annotated records (chi-square p = 3.1e-204). Stratification by annotation status is required for unbiased aggregate statistics.
+- **ClinVar condition annotation is incomplete**: 1,547 of 2,432 records (63.6%) list the associated condition as "not provided", with a significantly different classification distribution from annotated records (chi-square p = 3.1e-204). Stratification by annotation status is required for unbiased aggregate statistics. Domain-level analyses are not differentially affected: the not-provided fraction is statistically uniform across domains (chi-square p > 0.05).
+- **HGVS parseability is classification-biased**: benign variants have a substantially lower parse rate (53%) than VUS (88%) or conflicting variants (87%), primarily because intronic and splice variants with only c-dot notation lack protein positions. Domain-level pathogenic fraction estimates are therefore upward-biased: a proportion of benign variants cannot be mapped to any domain and are excluded from domain analyses. This is quantified in `results/hgvs_nonparseable_summary.csv`.
 - **gnomAD represents adult individuals** and explicitly excludes those with diagnosed severe pediatric disease. The three P/LP homozygotes identified are consistent with HW-expected rare sampling events, not misclassification.
 - The **AlphaFold-predicted structure** is computational; experimentally determined structures of full-length otoferlin are not yet available. The calcium-binding residues used as reference points in the structural analysis are from published crystallographic data of individual C2 domains (Helfmann et al. 2011), not full-length coordinates.
 - **Short-read sequencing has limitations** for *OTOF* variant detection, including difficulties in phasing variants across the large gene and in detecting deep intronic and complex structural variants.
@@ -244,6 +253,7 @@ otof-variants-integrated-analysis/
 ├── requirements.txt               # pip, exact versions pinned
 ├── environment.yml                # conda environment
 ├── .gitignore
+├── inject_cells_03.py             # standalone script that appends supplementary cells to notebook 03
 ├── data/
 │   ├── clinvar_result.txt                              # ClinVar export (OTOF variants)
 │   ├── gnomad_otof_variants.csv                        # gnomAD v4 export
@@ -252,7 +262,7 @@ otof-variants-integrated-analysis/
 ├── notebooks/
 │   ├── 01-exploration.ipynb                            # ClinVar descriptive analysis
 │   ├── 02-gnomad-integration.ipynb                     # gnomAD integration and ancestry analysis
-│   ├── 03-domain-mapping.ipynb                         # Domain-level analysis, permutation test, lollipop plot
+│   ├── 03-domain-mapping.ipynb                         # Domain-level analysis, permutation test, Fisher's test, fraction pathogenic, sensitivity analyses
 │   ├── 04-consurf-vus.ipynb                            # ConSurf integration and VUS reclassification
 │   ├── 05-clinvar-temporal.ipynb                       # Temporal analysis of ClinVar evaluations
 │   ├── 06-interactive-lollipop.ipynb                   # Interactive Plotly lollipop plot
@@ -287,7 +297,16 @@ otof-variants-integrated-analysis/
     ├── otof_structural_per_residue.csv                 # Per-residue pLDDT and distance to Ca-binding sites
     ├── plddt_by_classification.png                     # pLDDT distribution by clinical classification
     ├── distance_to_ca_binding.png                      # Distance to calcium-binding residues by classification
-    └── spatial_clustering_test.csv                     # P/LP spatial clustering permutation test results
+    ├── spatial_clustering_test.csv                     # P/LP spatial clustering permutation test results
+    ├── domain_fisher_exact.csv                         # Fisher's exact test per domain vs linker (OR, Bonferroni p)
+    ├── domain_fraction_pathogenic.csv                  # Fraction pathogenic per domain with 95% Wilson CI
+    ├── domain_fraction_pathogenic.png                  # Horizontal bar chart of fraction pathogenic
+    ├── domain_not_provided_bias.csv                    # Not-provided annotation fraction per domain
+    ├── domain_not_provided_bias.png                    # Stacked bar chart of annotation status by domain
+    ├── arg1172gln_consurf.png                          # ConSurf grade distribution with p.Arg1172Gln highlighted
+    ├── arg1172gln_summary.csv                          # p.Arg1172Gln: domain, ConSurf grade, percentile
+    ├── hgvs_nonparseable_sensitivity.png               # Parse rate by consequence and classification
+    └── hgvs_nonparseable_summary.csv                   # Per-classification parseable vs non-parseable counts
 ```
 
 ## How to reproduce
